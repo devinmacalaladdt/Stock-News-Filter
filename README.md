@@ -1,7 +1,7 @@
 # Stock-News-Filter
 Filters stock tickers based on news then displays and sorts based off indicators/analysis
-In order to use this script, you must first register for API keys from https://finnhub.io/ and https://www.alphavantage.co/
-Additionally, make sure the request package is installed, infor here: https://stackoverflow.com/questions/17309288/importerror-no-module-named-requests
+In order to use this script, you must first register for API keys from https://finnhub.io/ and https://www.alphavantage.co/ .
+Additionally, make sure the request package is installed, info here: https://stackoverflow.com/questions/17309288/importerror-no-module-named-requests
 
 
 Run the script as so: $python .\main.py [finnhub key] [alphavantage key] [sentiment] [article volume] [sentiment percentage]
