@@ -3,7 +3,6 @@ import requests
 import time
 from datetime import datetime, timezone
 import re
-import praw
 from queue import PriorityQueue
 
 finnhub_key = sys.argv[1]
@@ -12,6 +11,8 @@ bull_bear = sys.argv[3]
 article_volume = int(sys.argv[4])
 percent = float(sys.argv[5])
 max_reddit_comments=int(sys.argv[6])
+if max_reddit_comments!=0:
+    import praw
 ticker_to_num_of_comments = {} #mapping of ticker to current number of reddit comments added
 ticker_to_comments = {} #mapping of ticker to string containing reddit comments
 output = PriorityQueue() #queue of tuples containing ticker and analysis, sorted by RSI
@@ -36,7 +37,7 @@ def iterate_tickers(): #iterates over all available tickers and checks against i
         try:
 
             if int((news_sentiment.json()['buzz'])['articlesInLastWeek'])>=article_volume and float(((news_sentiment.json())['sentiment'])[news_type])>=percent/100:
-                last_check_time = ticker_output(last_check_time) #criteria was met for this ticker, add to the output queue and reset time
+                last_check_time = ticker_output(last_check_time,ticker) #criteria was met for this ticker, add to the output queue and reset time
 
         except Exception as e:
 
@@ -44,7 +45,7 @@ def iterate_tickers(): #iterates over all available tickers and checks against i
             print(e)
             continue
 
-def ticker_output(last_check_time): # gets analytical data from APIs and adds along with ticker to output queue
+def ticker_output(last_check_time,ticker): # gets analytical data from APIs and adds along with ticker to output queue
 
     print("-------->" + ticker['symbol'])
     ticker_to_comments[ticker['symbol']] = "" #add ticker key to both dictionaries
@@ -92,11 +93,9 @@ def get_reddit_comments(): #iterates over comments in thread to find matches to 
                                 if ticker_to_num_of_comments[word]>=max_reddit_comments: #unless it has already had max amount of comments added
                                     continue
                                 else:
-                                    print("//////////////////////////////////////")
                                     ticker_to_comments[word]+="["+(datetime.utcfromtimestamp(float(comment.created_utc))).strftime('%m/%d/%Y---%H:%M')+"]\n"+comment.body+"\n"
                                     for reply in comment.replies:
                                         ticker_to_comments[word]+="\t->" + reply.body + "\n"
-                                    print("//////////////////////////////////////")
                                     ticker_to_num_of_comments[word]+=1
 
 if __name__ == "__main__":
