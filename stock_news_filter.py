@@ -92,11 +92,9 @@ def get_reddit_comments(): #iterates over comments in thread to find matches to 
                                 if ticker_to_num_of_comments[word]>=max_reddit_comments: #unless it has already had max amount of comments added
                                     continue
                                 else:
-                                    print("//////////////////////////////////////")
                                     ticker_to_comments[word]+="["+(datetime.utcfromtimestamp(float(comment.created_utc))).strftime('%m/%d/%Y---%H:%M')+"]\n"+comment.body+"\n"
                                     for reply in comment.replies:
                                         ticker_to_comments[word]+="\t->" + reply.body + "\n"
-                                    print("//////////////////////////////////////")
                                     ticker_to_num_of_comments[word]+=1
 
 if __name__ == "__main__":
