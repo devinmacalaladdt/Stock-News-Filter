@@ -36,7 +36,7 @@ def iterate_tickers(): #iterates over all available tickers and checks against i
         try:
 
             if int((news_sentiment.json()['buzz'])['articlesInLastWeek'])>=article_volume and float(((news_sentiment.json())['sentiment'])[news_type])>=percent/100:
-                last_check_time = ticker_output(last_check_time) #criteria was met for this ticker, add to the output queue and reset time
+                last_check_time = ticker_output(last_check_time,ticker) #criteria was met for this ticker, add to the output queue and reset time
 
         except Exception as e:
 
@@ -44,7 +44,7 @@ def iterate_tickers(): #iterates over all available tickers and checks against i
             print(e)
             continue
 
-def ticker_output(last_check_time): # gets analytical data from APIs and adds along with ticker to output queue
+def ticker_output(last_check_time,ticker): # gets analytical data from APIs and adds along with ticker to output queue
 
     print("-------->" + ticker['symbol'])
     ticker_to_comments[ticker['symbol']] = "" #add ticker key to both dictionaries
